@@ -1,5 +1,8 @@
 #include QMK_KEYBOARD_H
 
+// ~~~~~~~~~~~~~~~~~ DEFINITIONS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
 
 #ifdef RGBLIGHT_ENABLE
 //Following line allows macro to read current RGB settings
@@ -13,12 +16,14 @@ extern uint8_t is_master;
 // Layer names don't all need to be of the same length, obviously, and you can also skip them
 // entirely and just use numbers.
 #define _QWERTY 0
-#define _LOWER 1
-#define _RAISE 2
-#define _ADJUST 3
+#define _COLEMAK 1
+#define _LOWER 2
+#define _RAISE 3
+#define _ADJUST 4
 
 enum custom_keycodes {
   QWERTY = SAFE_RANGE,
+  COLEMAK,
   LOWER,
   RAISE,
   ADJUST,
@@ -30,6 +35,8 @@ enum macro_keycodes {
   KC_SAMPLEMACRO,
 };
 
+// ~~~~~~~~~~~~~~~~~ LAYERS AND KEYMAPS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [_QWERTY] = LAYOUT_split_3x6_3( \
   //,-----------------------------------------------------.                    ,-----------------------------------------------------.
@@ -38,6 +45,17 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
       KC_LCTL,    KC_A,    KC_S,    KC_D,    KC_F,    KC_G,                         KC_H,    KC_J,    KC_K,    KC_L, KC_SCLN, KC_QUOT,\
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
       KC_LSFT,    KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,                         KC_N,    KC_M, KC_COMM,  KC_DOT, KC_SLSH, KC_RSFT,\
+  //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
+                                          KC_LGUI,   KC_ENT,  LOWER,     RAISE,  KC_SPC,  KC_LALT \
+                                      //`--------------------------'  `--------------------------'
+  ),
+   [_COLEMAK] = LAYOUT_split_3x6_3( \
+  //,-----------------------------------------------------.                    ,-----------------------------------------------------.
+       KC_TAB,    KC_Q,    KC_W,    KC_F,    KC_P,    KC_G,                         KC_J,    KC_L,    KC_U,    KC_Y, KC_SCLN, KC_BSPC,\
+  //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
+      KC_LCTL,    KC_A,    KC_R,    KC_S,    KC_T,    KC_D,                         KC_H,    KC_N,    KC_E,    KC_I,    KC_O, KC_QUOT,\
+  //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
+      KC_LSFT,    KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,                         KC_K,    KC_M, KC_COMM,  KC_DOT, KC_SLSH, KC_RSFT,\
   //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
                                           KC_LGUI,   KC_ENT,  LOWER,     RAISE,  KC_SPC,  KC_LALT \
                                       //`--------------------------'  `--------------------------'
@@ -54,7 +72,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
                                           KC_LGUI,   KC_ENT,  LOWER,     RAISE,  KC_SPC,  KC_LALT \
                                       //`--------------------------'  `--------------------------'
-    ),
+
+
+  ),
 
   [_RAISE] = LAYOUT_split_3x6_3( \
   //,-----------------------------------------------------.                    ,-----------------------------------------------------.
@@ -70,14 +90,14 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
   [_ADJUST] = LAYOUT_split_3x6_3( \
   //,-----------------------------------------------------.                    ,-----------------------------------------------------.
-        RESET, XXXXXXX, XXXXXXX, KC_BRID, KC_BRIU, XXXXXXX,                        KC_F1,   KC_F2,   KC_F3,   KC_F4, XXXXXXX, XXXXXXX,\
+        RESET, XXXXXXX, XXXXXXX, KC_BRID, KC_BRIU, XXXXXXX,                        KC_F1,   KC_F2,   KC_F3,   KC_F4, DF(_QWERTY), XXXXXXX,\
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-      XXXXXXX, XXXXXXX, KC_MUTE, KC_VOLD, KC_VOLU, XXXXXXX,                        KC_F5,   KC_F6,   KC_F7,   KC_F8, XXXXXXX, XXXXXXX,\
+      XXXXXXX, XXXXXXX, KC_MUTE, KC_VOLD, KC_VOLU, XXXXXXX,                        KC_F5,   KC_F6,   KC_F7,   KC_F8, DF(_COLEMAK), XXXXXXX,\
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
       KC_LSFT, KC_MPRV, KC_MSTP, KC_MPLY, KC_MNXT, XXXXXXX,                        KC_F9,  KC_F10,  KC_F11,  KC_F12, XXXXXXX, KC_RSFT,\
   //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
                                           KC_LGUI,   KC_ENT,  LOWER,     RAISE,  KC_SPC,  KC_LALT \
-                                      //`--------------------------'  `--------------------------'
+                                    //`--------------------------'  `--------------------------'
   )
 };
 

@@ -4,10 +4,10 @@
 
 
 
-#ifdef RGBLIGHT_ENABLE
+//#ifdef RGBLIGHT_ENABLE
 //Following line allows macro to read current RGB settings
-extern rgblight_config_t rgblight_config;
-#endif
+//extern rgblight_config_t rgblight_config;
+//#endif
 
 extern uint8_t is_master;
 
@@ -92,7 +92,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
   [_ADJUST] = LAYOUT_split_3x6_3( \
   //,-----------------------------------------------------.                    ,-----------------------------------------------------.
-        RESET, XXXXXXX, XXXXXXX, KC_BRID, KC_BRIU, XXXXXXX,                        KC_F1,   KC_F2,   KC_F3,   KC_F4, DF(_QWERTY), XXXXXXX,\
+       QK_RBT, XXXXXXX, XXXXXXX, KC_BRID, KC_BRIU, XXXXXXX,                        KC_F1,   KC_F2,   KC_F3,   KC_F4, DF(_QWERTY), XXXXXXX,\
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
       XXXXXXX, XXXXXXX, KC_MUTE, KC_VOLD, KC_VOLU, XXXXXXX,                        KC_F5,   KC_F6,   KC_F7,   KC_F8, DF(_COLEMAK), XXXXXXX,\
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
@@ -120,13 +120,13 @@ void update_tri_layer_RGB(uint8_t layer1, uint8_t layer2, uint8_t layer3) {
 }
 
 void matrix_init_user(void) {
-    #ifdef RGBLIGHT_ENABLE
-      RGB_current_mode = rgblight_config.mode;
-    #endif
-    //SSD1306 OLED init, make sure to add #define SSD1306OLED in config.h
-    #ifdef SSD1306OLED
-        iota_gfx_init(!has_usb());   // turns on the display
-    #endif
+    //#ifdef RGBLIGHT_ENABLE
+    //  RGB_current_mode = rgblight_config.mode;
+    //#endif
+    ////SSD1306 OLED init, make sure to add #define SSD1306OLED in config.h
+    //#ifdef SSD1306OLED
+    //    iota_gfx_init(!has_usb());   // turns on the display
+    //#endif
 }
 
 //SSD1306 OLED update loop, make sure to add #define SSD1306OLED in config.h
@@ -216,23 +216,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
           layer_off(_ADJUST);
         }
         return false;
-    case RGB_MOD:
-      #ifdef RGBLIGHT_ENABLE
-        if (record->event.pressed) {
-          rgblight_mode(RGB_current_mode);
-          rgblight_step();
-          RGB_current_mode = rgblight_config.mode;
-        }
-      #endif
-      return false;
-    case RGBRST:
-      #ifdef RGBLIGHT_ENABLE
-        if (record->event.pressed) {
-          eeconfig_update_rgblight_default();
-          rgblight_enable();
-          RGB_current_mode = rgblight_config.mode;
-        }
-      #endif
       break;
   }
   return true;
